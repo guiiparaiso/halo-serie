@@ -235,11 +235,6 @@
         padding: 1.5rem 1rem;
         text-align: center;
         transition: box-shadow 0.3s;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        gap: 20px;
     }
 
     .stat-box:hover {
@@ -249,7 +244,7 @@
     .stat-number {
         font-family: 'Orbitron', sans-serif;
         font-size: clamp(1.8rem, 4vw, 2.8rem);
-        font-weight: 900;
+        font-weight: 80px;
         color: var(--neon-cyan);
         text-shadow: 0 0 20px var(--neon-cyan);
         display: block;
