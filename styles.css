@@ -238,7 +238,7 @@
     }
 
     .stat-box:hover {
-        box-shadow: 0 0 24px rgba(0,200,255,0.2);
+        box-shadow: 0 10 24px rgba(0,200,255,0.2);
     }
 
     .stat-number {
