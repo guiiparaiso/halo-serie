@@ -32,7 +32,7 @@ This project recreates the atmosphere of the Halo TV series through an immersive
 Clone the repository:
 
 ```bash
-git clone https://github.com/SEU-USUARIO/halo-series.git
+git clone https://github.com/guiiparaiso/halo-series.git
 ```
 
 Open the project folder:
