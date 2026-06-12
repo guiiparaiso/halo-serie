@@ -244,7 +244,7 @@
     .stat-number {
         font-family: 'Orbitron', sans-serif;
         font-size: clamp(1.8rem, 4vw, 2.8rem);
-        font-weight: 80px;
+        font-weight: 700;
         color: var(--neon-cyan);
         text-shadow: 0 0 20px var(--neon-cyan);
         display: block;
@@ -344,6 +344,37 @@
         .cast-grid { grid-template-columns: 1fr 1fr; }
         .stats-row  { grid-template-columns: 1fr 1fr; }
         .gallery-grid { grid-template-columns: 1fr; }
+
+        .hero-badge {
+            font-size: 0.6rem;
+            letter-spacing: 2px;
+            padding: 0.5rem 1rem;
+            text-align: center;
+            white-space: normal;
+            max-width: 90%;
+            line-height: 1.6;
+        }
+
+        .intro-sub {
+            letter-spacing: 4px;
+            text-align: center;
+            padding: 0 1.5rem;
+            white-space: normal;
+            line-height: 1.6;
+        }
+    }
+
+    @media (max-width: 420px) {
+        .hero-badge {
+            font-size: 0.5rem;
+            letter-spacing: 1px;
+            padding: 0.5rem 0.8rem;
+        }
+
+        .intro-sub {
+            font-size: 0.5rem;
+            letter-spacing: 2px;
+        }
     }
 
         * {
@@ -393,6 +424,12 @@
         }
 
         body:hover .cursor { opacity: 1; }
+
+        /* ── CURSOR CUSTOMIZADO: apenas em dispositivos com mouse ── */
+        @media (hover: none), (pointer: coarse) {
+            body { cursor: auto; }
+            .cursor, .cursor-ring { display: none; }
+        }
 
         /* ── STARS BACKGROUND ── */
         #stars-canvas {
@@ -671,340 +708,4 @@
         /* Full-width sections */
         .full-section {
             position: relative;
-            padding: 6rem 2rem;
-            overflow: hidden;
-        }
-
-        .full-section::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: radial-gradient(ellipse 70% 80% at 50% 50%, rgba(0,200,255,0.05), transparent);
-            pointer-events: none;
-        }
-
-        .full-section .inner {
-            max-width: 900px;
-            margin: 0 auto;
-            text-align: center;
-        }
-
-        .full-section h2 {
-            font-family: 'Orbitron', sans-serif;
-            font-size: clamp(1.5rem, 3vw, 2.2rem);
-            color: var(--neon-cyan);
-            margin-bottom: 1.5rem;
-            text-shadow: 0 0 20px rgba(0,200,255,0.4);
-        }
-
-        .full-section h2::before {
-            content: '//';
-            color: rgba(0,200,255,0.35);
-            margin-right: 0.5rem;
-            font-size: 0.75em;
-        }
-
-        .full-section p {
-            color: var(--text-secondary);
-            font-size: 1.05rem;
-            line-height: 1.85;
-            margin-bottom: 1rem;
-            text-align: justify;
-        }
-
-        /* ── TEMPORADAS CARDS ── */
-        .season-cards {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 2rem;
-            margin-top: 2.5rem;
-        }
-
-        .season-card {
-            background: var(--space-panel);
-            border: 1px solid var(--border-glow);
-            border-radius: 4px;
-            padding: 2rem;
-            position: relative;
-            overflow: hidden;
-            transition: transform 0.4s ease, box-shadow 0.4s ease;
-        }
-
-        .season-card::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0;
-            width: 100%; height: 2px;
-            background: linear-gradient(90deg, transparent, var(--neon-cyan), transparent);
-            transform: scaleX(0);
-            transition: transform 0.5s ease;
-        }
-
-        .season-card:hover::before { transform: scaleX(1); }
-
-        .season-card:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 20px 60px rgba(0,200,255,0.15);
-        }
-
-        .season-number {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 3.5rem;
-            font-weight: 900;
-            color: rgba(0,200,255,0.12);
-            position: absolute;
-            top: 0.8rem; right: 1.2rem;
-            line-height: 1;
-        }
-
-        .season-label {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 0.7rem;
-            letter-spacing: 3px;
-            color: var(--neon-cyan);
-            text-transform: uppercase;
-            margin-bottom: 0.5rem;
-        }
-
-        .season-card strong {
-            display: block;
-            font-family: 'Rajdhani', sans-serif;
-            font-size: 1.1rem;
-            color: var(--text-primary);
-            margin-bottom: 0.5rem;
-        }
-
-        .season-card p {
-            color: var(--text-secondary);
-            font-size: 0.95rem;
-        }
-
-        /* ── ASSISTA BUTTONS ── */
-        .watch-buttons {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-            margin-top: 2.5rem;
-            align-items: center;
-        }
-
-        .watch-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 1rem;
-            padding: 1rem 2.5rem;
-            border: 1px solid var(--border-glow);
-            background: var(--space-panel);
-            color: var(--text-primary);
-            text-decoration: none;
-            font-family: 'Rajdhani', sans-serif;
-            font-weight: 600;
-            font-size: 1rem;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            border-radius: 3px;
-            position: relative;
-            overflow: hidden;
-            transition: all 0.35s ease;
-            min-width: 320px;
-            justify-content: center;
-        }
-
-        .watch-btn::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(90deg, transparent, rgba(0,200,255,0.08), transparent);
-            transform: translateX(-100%);
-            transition: transform 0.5s ease;
-        }
-
-        .watch-btn:hover::before { transform: translateX(100%); }
-
-        .watch-btn:hover {
-            border-color: var(--neon-cyan);
-            color: var(--neon-cyan);
-            box-shadow: 0 0 25px rgba(0,200,255,0.2), inset 0 0 25px rgba(0,200,255,0.05);
-        }
-
-        .watch-btn i {
-            font-size: 1.1rem;
-            color: var(--neon-cyan);
-        }
-
-        /* ── DIVIDER ── */
-        .halo-divider {
-            width: 100%;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, var(--border-glow), transparent);
-            margin: 0;
-        }
-
-        /* ── FOOTER ── */
-        footer {
-            position: relative;
-            z-index: 1;
-            background: rgba(2, 9, 20, 0.9);
-            border-top: 1px solid var(--border-glow);
-            padding: 2.5rem;
-            text-align: center;
-        }
-
-        footer p {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 0.7rem;
-            letter-spacing: 3px;
-            color: var(--text-secondary);
-            text-transform: uppercase;
-        }
-
-        footer::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 50%;
-            transform: translateX(-50%);
-            width: 200px; height: 1px;
-            background: var(--neon-cyan);
-            box-shadow: 0 0 20px var(--neon-cyan);
-        }
-
-        /* ── SCAN LINE EFFECT (subtle) ── */
-        body::after {
-            content: '';
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: repeating-linear-gradient(
-                0deg,
-                transparent,
-                transparent 3px,
-                rgba(0,0,0,0.03) 3px,
-                rgba(0,0,0,0.03) 4px
-            );
-            pointer-events: none;
-            z-index: 9999;
-        }
-
-        /* ── GLITCH TITLE EFFECT ── */
-        @keyframes glitch {
-            0% { clip-path: inset(40% 0 61% 0); transform: skew(-0.2deg); }
-            20% { clip-path: inset(92% 0 1% 0); transform: skew(0.3deg); }
-            40% { clip-path: inset(43% 0 1% 0); transform: skew(0.1deg); }
-            60% { clip-path: inset(25% 0 58% 0); transform: skew(-0.3deg); }
-            80% { clip-path: inset(54% 0 7% 0); transform: skew(0.4deg); }
-            100% { clip-path: inset(58% 0 43% 0); transform: skew(0deg); }
-        }
-
-        .glitch-wrap {
-            position: relative;
-            display: inline-block;
-        }
-
-        .glitch-wrap::before,
-        .glitch-wrap::after {
-            content: attr(data-text);
-            position: absolute;
-            top: 0; left: 0;
-            width: 100%;
-            font-family: 'Orbitron', sans-serif;
-            font-size: inherit;
-            font-weight: 900;
-        }
-
-        .glitch-wrap::before {
-            color: #00ffe7;
-            animation: glitch 3s infinite linear alternate-reverse;
-            opacity: 0.6;
-        }
-
-        .glitch-wrap::after {
-            color: #ff003c;
-            animation: glitch 3.5s infinite linear alternate;
-            opacity: 0.3;
-        }
-
-        /* ── ANIMATE ON SCROLL ── */
-        .reveal {
-            opacity: 0;
-            transform: translateY(40px);
-            transition: opacity 0.7s ease, transform 0.7s ease;
-        }
-
-        .reveal.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .reveal-left {
-            opacity: 0;
-            transform: translateX(-50px);
-            transition: opacity 0.7s ease, transform 0.7s ease;
-        }
-
-        .reveal-left.visible {
-            opacity: 1;
-            transform: translateX(0);
-        }
-
-        .reveal-right {
-            opacity: 0;
-            transform: translateX(50px);
-            transition: opacity 0.7s ease, transform 0.7s ease;
-        }
-
-        .reveal-right.visible {
-            opacity: 1;
-            transform: translateX(0);
-        }
-
-        /* ── KEYFRAMES ── */
-        @keyframes fadeSlideUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to   { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes pulse-border {
-            0%, 100% { box-shadow: 0 0 10px rgba(0,200,255,0.2); }
-            50%       { box-shadow: 0 0 30px rgba(0,200,255,0.5); }
-        }
-
-        /* ── HEX DECORATION ── */
-        .hex-deco {
-            position: absolute;
-            font-family: 'Orbitron', sans-serif;
-            font-size: 0.65rem;
-            letter-spacing: 2px;
-            color: rgba(0,200,255,0.15);
-            text-transform: uppercase;
-            pointer-events: none;
-            user-select: none;
-        }
-
-        /* ── HORIZONTAL RULE ── */
-        .section-rule {
-            width: 60px;
-            height: 2px;
-            background: linear-gradient(90deg, var(--neon-cyan), transparent);
-            margin: 1.2rem 0;
-        }
-
-        /* ── PROGRESS BAR ── */
-        #progress-bar {
-            position: fixed;
-            top: 0; left: 0;
-            height: 2px;
-            background: linear-gradient(90deg, var(--neon-cyan), var(--neon-blue));
-            box-shadow: 0 0 10px var(--neon-cyan);
-            z-index: 2000;
-            width: 0%;
-            transition: width 0.1s;
-        }
-
-        /* ── RESPONSIVE ── */
-        @media (max-width: 800px) {
-            .section-grid { grid-template-columns: 1fr; }
-            .section-grid.reverse { direction: ltr; }
-            .season-cards { grid-template-columns: 1fr; }
-            nav ul { gap: 1.2rem; }
-            .watch-btn { min-width: auto; width: 100%; }
-        }
+    
