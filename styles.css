@@ -235,6 +235,11 @@
         padding: 1.5rem 1rem;
         text-align: center;
         transition: box-shadow 0.3s;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 20px;
     }
 
     .stat-box:hover {
