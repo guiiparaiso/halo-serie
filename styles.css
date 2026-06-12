@@ -26,6 +26,15 @@
         font-family: 'Orbitron', sans-serif;
         color: #00ffe7;
         transition: opacity 0.8s ease;
+        animation: introAutoHide 0.6s 4.5s forwards;
+    }
+
+    @keyframes introAutoHide {
+        to {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
     }
 
     #intro-screen.fade-out {
@@ -699,13 +708,4 @@
         }
 
         .section-text p {
-            color: var(--text-secondary);
-            font-size: 1.05rem;
-            line-height: 1.8;
-            margin-bottom: 1rem;
-        }
-
-        /* Full-width sections */
-        .full-section {
-            position: relative;
-    
+            color: var(--text-secondar
