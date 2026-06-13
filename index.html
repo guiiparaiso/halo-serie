@@ -652,6 +652,13 @@
         document.getElementById('nav-menu').classList.toggle('open');
     });
 
+    /* Fecha o menu ao clicar em qualquer link de nav no mobile */
+    document.querySelectorAll('#nav-menu .nav-item').forEach(function(link) {
+        link.addEventListener('click', function() {
+            document.getElementById('nav-menu').classList.remove('open');
+        });
+    });
+
     /* ══ CUSTOM CURSOR ══ */
     const cursor = document.getElementById('cursor');
     const ring   = document.getElementById('cursor-ring');
@@ -754,10 +761,10 @@
     const hero = document.getElementById('sobre');
     const isMobile = window.matchMedia('(max-width: 768px)').matches;
     window.addEventListener('scroll', () => {
+        if (isMobile) return;
         const offset = window.scrollY;
-        if (!isMobile && offset < window.innerHeight) {
-            hero.style.transform = `translateY(${offset * 0.2}px)`;
-            hero.style.opacity   = 1 - offset / (window.innerHeight * 0.85);
+        if (offset < window.innerHeight) {
+            hero.style.transform = `translateY(${offset * 0.15}px)`;
         }
     }, { passive: true });
 
