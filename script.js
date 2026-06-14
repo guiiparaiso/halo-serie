@@ -202,15 +202,15 @@ document.addEventListener('DOMContentLoaded', function () {
     if (seqIdx === SEQ.length) { seqIdx = 0; openMenu(); }
   });
 
-  /* ══ BOTÃO SECRETO MOBILE: 5 taps no logo do header ══ */
+  /* ══ BOTÃO SECRETO MOBILE: 5 taps rápidos no logo do header ══ */
   (function secretLogoTap() {
     const logo = document.getElementById('logo');
     if (!logo) return;
     let tapCount = 0, tapTimer = null;
 
     function handleTap(e) {
-      // Bloqueia o href="#" para não rolar a página
       e.preventDefault();
+      e.stopPropagation();
       tapCount++;
       clearTimeout(tapTimer);
       if (tapCount >= 5) {
@@ -221,12 +221,8 @@ document.addEventListener('DOMContentLoaded', function () {
       tapTimer = setTimeout(function() { tapCount = 0; }, 1500);
     }
 
-    // touchstart: sem delay de 300ms, funciona melhor no mobile
-    logo.addEventListener('touchstart', handleTap, { passive: false });
-    // click: fallback para desktop (Konami já funciona, mas deixa como backup)
-    logo.addEventListener('click', function(e) {
-      e.preventDefault();
-    });
+    // pointerdown funciona em touch E mouse, sem delay de 300ms e sem conflito com href
+    logo.addEventListener('pointerdown', handleTap);
   })();
 
   /* ══ AUDIO ENGINE ══ */
@@ -514,4 +510,7 @@ document.addEventListener('DOMContentLoaded', function () {
       <div style="font-size:clamp(0.5rem,1.8vw,0.7rem);letter-spacing:6px;color:#7ab8d4;">⬆⬆⬇⬇⬅➡⬅➡ B A</div>
       <div style="font-size:clamp(2rem,7vw,4rem);font-weight:900;letter-spacing:4px;text-shadow:0 0 40px #00ffe7,0 0 80px #00c8ff;">SPARTAN PROTOCOL</div>
       <div style="font-size:clamp(0.55rem,1.8vw,0.8rem);letter-spacing:4px;color:#7ab8d4;">JOHN-117 · SELECIONE A MISSÃO</div>
-  
+      <div class="sg-mode-grid">
+        <div class="sg-mode-card" data-mode="classic">
+          <div class="sg-mode-icon">🛡️</div>
+          <div class="sg-mode-name">CLASSIC<
