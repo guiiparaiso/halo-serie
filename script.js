@@ -202,6 +202,23 @@ document.addEventListener('DOMContentLoaded', function () {
     if (seqIdx === SEQ.length) { seqIdx = 0; openMenu(); }
   });
 
+  /* ══ BOTÃO SECRETO MOBILE: 5 taps no logo do header ══ */
+  (function secretLogoTap() {
+    const logo = document.getElementById('logo');
+    if (!logo) return;
+    let tapCount = 0, tapTimer = null;
+    logo.addEventListener('click', function() {
+      tapCount++;
+      clearTimeout(tapTimer);
+      if (tapCount >= 5) {
+        tapCount = 0;
+        openMenu();
+        return;
+      }
+      tapTimer = setTimeout(() => { tapCount = 0; }, 1200);
+    });
+  })();
+
   /* ══ AUDIO ENGINE ══ */
   let _AC = null;
   function AC() {
@@ -381,6 +398,85 @@ document.addEventListener('DOMContentLoaded', function () {
       body.game-active, body.game-active * { cursor:default !important; }
       body.game-active .cursor, body.game-active .cursor-ring { display:none!important; }
       @media(max-width:500px){ .sg-mode-grid{grid-template-columns:1fr;} }
+
+      /* ── CONTROLES TOUCH ── */
+      #sg-touch-controls {
+        position:absolute;bottom:0;left:0;right:0;
+        height:160px;pointer-events:none;z-index:20;
+        display:none;
+      }
+      #sg-touch-controls.visible { display:block; }
+
+      /* Joystick esquerdo */
+      #sg-joystick-zone {
+        position:absolute;bottom:20px;left:20px;
+        width:120px;height:120px;pointer-events:all;
+      }
+      #sg-joystick-base {
+        position:absolute;inset:0;border-radius:50%;
+        border:2px solid rgba(0,200,255,0.3);
+        background:rgba(0,200,255,0.05);
+      }
+      #sg-joystick-knob {
+        position:absolute;
+        width:48px;height:48px;
+        border-radius:50%;
+        background:rgba(0,200,255,0.25);
+        border:2px solid rgba(0,200,255,0.6);
+        box-shadow:0 0 12px rgba(0,200,255,0.3);
+        top:50%;left:50%;
+        transform:translate(-50%,-50%);
+        transition:transform 0.05s;
+        pointer-events:none;
+      }
+
+      /* Botão de tiro */
+      #sg-btn-shoot {
+        position:absolute;bottom:30px;right:20px;
+        width:72px;height:72px;border-radius:50%;
+        border:2px solid rgba(0,200,255,0.5);
+        background:rgba(0,200,255,0.1);
+        color:#00ffe7;font-size:1.4rem;
+        display:flex;align-items:center;justify-content:center;
+        pointer-events:all;user-select:none;
+        box-shadow:0 0 16px rgba(0,200,255,0.2);
+        font-family:'Orbitron',sans-serif;font-size:0.5rem;
+        letter-spacing:1px;flex-direction:column;gap:2px;
+      }
+      #sg-btn-shoot.active { background:rgba(0,200,255,0.3); box-shadow:0 0 24px rgba(0,200,255,0.5); }
+
+      /* Botão dash */
+      #sg-btn-dash {
+        position:absolute;bottom:110px;right:100px;
+        width:48px;height:48px;border-radius:50%;
+        border:2px solid rgba(0,255,231,0.4);
+        background:rgba(0,255,231,0.08);
+        color:#00ffe7;font-size:0.45rem;letter-spacing:1px;
+        display:flex;align-items:center;justify-content:center;
+        pointer-events:all;user-select:none;
+        font-family:'Orbitron',sans-serif;flex-direction:column;
+      }
+      #sg-btn-dash.active { background:rgba(0,255,231,0.25); }
+
+      /* Botões de poderes touch */
+      #sg-touch-powers {
+        position:absolute;top:52px;right:4px;
+        display:flex;flex-direction:column;gap:4px;
+        pointer-events:all;
+      }
+      .sg-touch-power {
+        width:40px;height:40px;border-radius:4px;
+        border:1px solid rgba(0,200,255,0.3);
+        background:rgba(0,200,255,0.06);
+        display:flex;align-items:center;justify-content:center;
+        font-size:1rem;pointer-events:all;user-select:none;
+        position:relative;
+      }
+      .sg-touch-power.ready { border-color:#00ffe7; background:rgba(0,200,255,0.14); box-shadow:0 0 8px rgba(0,200,255,0.2); }
+      .sg-touch-power.cooldown { opacity:0.35; }
+      .sg-touch-power .sg-cd-fill { position:absolute;bottom:0;left:0;right:0;background:rgba(0,200,255,0.15);border-radius:0 0 4px 4px; }
+
+      @media(min-width:701px){ #sg-touch-controls { display:none!important; } }
     `;
     document.head.appendChild(s);
   }
@@ -413,73 +509,4 @@ document.addEventListener('DOMContentLoaded', function () {
           <div class="sg-mode-icon">🛡️</div>
           <div class="sg-mode-name">CLASSIC</div>
           <div class="sg-mode-desc">Ondas de Covenant. Defenda a base UNSC. Sobreviva o máximo possível.</div>
-          <div style="font-size:0.55rem;color:#f0a500;margin-top:0.5rem;letter-spacing:2px;">RECORDE: ${hs.classic||0}</div>
-        </div>
-        <div class="sg-mode-card" data-mode="survival">
-          <div class="sg-mode-icon">⚡</div>
-          <div class="sg-mode-name">SURVIVAL</div>
-          <div class="sg-mode-desc">Sem base. Desvie e sobreviva. Score por tempo e kills.</div>
-          <div style="font-size:0.55rem;color:#f0a500;margin-top:0.5rem;letter-spacing:2px;">RECORDE: ${hs.survival||0}</div>
-        </div>
-        <div class="sg-mode-card" data-mode="boss">
-          <div class="sg-mode-icon">👾</div>
-          <div class="sg-mode-name">BOSS RUSH</div>
-          <div class="sg-mode-desc">5 chefes em sequência. Cada um com padrões únicos de ataque.</div>
-          <div style="font-size:0.55rem;color:#f0a500;margin-top:0.5rem;letter-spacing:2px;">RECORDE: ${hs.boss||0}</div>
-        </div>
-        <div class="sg-mode-card" data-mode="shield">
-          <div class="sg-mode-icon">🔵</div>
-          <div class="sg-mode-name">SHIELD MODE</div>
-          <div class="sg-mode-desc">Escudo reflete projéteis de volta. Destrua o Covenant com suas próprias balas.</div>
-          <div style="font-size:0.55rem;color:#f0a500;margin-top:0.5rem;letter-spacing:2px;">RECORDE: ${hs.shield||0}</div>
-        </div>
-      </div>
-      <div style="font-size:0.55rem;letter-spacing:2px;color:rgba(0,200,255,0.35);margin-top:0.5rem;font-family:'Rajdhani',sans-serif;line-height:1.9;">
-        ← → / A D · MOVER &nbsp;·&nbsp; SHIFT · DASH &nbsp;·&nbsp; ESPAÇO · SUPER TIRO &nbsp;·&nbsp; 1-4 · PODERES &nbsp;·&nbsp; ESC · SAIR
-      </div>
-      <button class="sg-btn-ghost" id="sg-menu-close">[ ESC · ABORTAR ]</button>
-    `;
-    document.body.appendChild(menu);
-
-    menu.querySelectorAll('.sg-mode-card').forEach(card => {
-      card.addEventListener('click', () => { menu.remove(); startGame(card.dataset.mode); });
-    });
-    document.getElementById('sg-menu-close').addEventListener('click', () => {
-      menu.remove(); document.body.classList.remove('game-active');
-    });
-    function menuEsc(e) {
-      if (e.key === 'Escape') { menu.remove(); document.body.classList.remove('game-active'); document.removeEventListener('keydown', menuEsc); }
-    }
-    document.addEventListener('keydown', menuEsc);
-  }
-
-  /* ══ GAME ENGINE ══ */
-  function startGame(mode) {
-    injectStyles();
-    removeEl('sg-wrap');
-    startBGMusic();
-
-    /* ── DOM ── */
-    const wrap   = document.createElement('div'); wrap.id = 'sg-wrap';
-    const canvas = document.createElement('canvas'); canvas.id = 'sg-canvas';
-    wrap.appendChild(canvas);
-
-    const hud = document.createElement('div'); hud.id = 'sg-hud';
-    hud.innerHTML = `
-      <span class="sg-hud-cell" id="sg-h-score">SCORE · 0</span>
-      <span class="sg-hud-cell" id="sg-h-mode">${mode.toUpperCase()}</span>
-      <span class="sg-hud-cell" id="sg-h-wave">WAVE · 1</span>
-      <span class="sg-hud-cell" id="sg-h-base">BASE ██████</span>
-      <span class="sg-hud-cell" id="sg-h-lives">❤❤❤</span>
-    `;
-    wrap.appendChild(hud);
-
-    const baseBg  = document.createElement('div'); baseBg.id  = 'sg-base-bar-bg';
-    const baseBar = document.createElement('div'); baseBar.id = 'sg-base-bar';
-    baseBg.appendChild(baseBar); wrap.appendChild(baseBg);
-
-    const announce = document.createElement('div'); announce.id = 'sg-announce'; wrap.appendChild(announce);
-    const comboEl  = document.createElement('div'); comboEl.id  = 'sg-combo';   wrap.appendChild(comboEl);
-
-    // Enemies left counter
-    const enemyCount = document.createElement('div'); enemyCoun
+          <div style="font-size:0.55rem;color:#f0a500;margin-top:0.5rem
