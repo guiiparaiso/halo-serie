@@ -405,8 +405,8 @@ function _initHaloScript() {
 
       /* ── CONTROLES TOUCH ── */
       #sg-touch-controls {
-        position:absolute;bottom:0;left:0;right:0;
-        height:160px;pointer-events:none;z-index:20;
+        position:absolute;bottom:0;left:0;right:0;top:0;
+        pointer-events:none;z-index:20;
         display:none;
       }
       #sg-touch-controls.visible { display:block; }
@@ -440,7 +440,7 @@ function _initHaloScript() {
         width:72px;height:72px;border-radius:50%;
         border:2px solid rgba(0,200,255,0.5);
         background:rgba(0,200,255,0.1);
-        color:#00ffe7;font-size:1.4rem;
+        color:#00ffe7;
         display:flex;align-items:center;justify-content:center;
         pointer-events:all;user-select:none;
         box-shadow:0 0 16px rgba(0,200,255,0.2);
@@ -480,9 +480,31 @@ function _initHaloScript() {
       .sg-touch-power.cooldown { opacity:0.35; }
       .sg-touch-power .sg-cd-fill { position:absolute;bottom:0;left:0;right:0;background:rgba(0,200,255,0.15);border-radius:0 0 4px 4px; }
 
-      @media(min-width:701px){ #sg-touch-controls { display:none!important; } }
+      /* Esconde controles touch em dispositivos com mouse (desktop) */
+      @media(pointer:fine){ #sg-touch-controls { display:none!important; } }
 
-      /* ── TELA DE ORIENTAÇÃO ── */
+      /* ── LANDSCAPE mobile: reposiciona controles ── */
+      @media (orientation:landscape) and (pointer:coarse) {
+        #sg-joystick-zone {
+          bottom:auto;top:50%;left:12px;
+          transform:translateY(-50%);
+          width:100px;height:100px;
+        }
+        #sg-btn-shoot {
+          bottom:auto;top:50%;right:12px;
+          transform:translateY(30%);
+          width:64px;height:64px;
+        }
+        #sg-btn-dash {
+          bottom:auto;top:50%;right:86px;
+          transform:translateY(-110%);
+          width:44px;height:44px;
+        }
+        #sg-touch-powers {
+          top:4px;right:4px;
+          flex-direction:row;gap:3px;
+        }
+      }
       #sg-rotate-screen {
         position:fixed;inset:0;z-index:2000000;
         background:#020914;
@@ -516,46 +538,6 @@ function _initHaloScript() {
       }
       #sg-rotate-skip:hover { color:#00ffe7;border-color:#00ffe7; }
 
-      /* ── LANDSCAPE: reorganiza controles touch ── */
-      @media (orientation: landscape) and (max-height: 500px) {
-        #sg-touch-controls { height:100% !important; }
-
-        #sg-joystick-zone {
-          bottom:50%;left:12px;
-          transform:translateY(50%);
-          width:110px;height:110px;
-        }
-
-        #sg-btn-shoot {
-          bottom:50%;right:12px;
-          transform:translateY(60%);
-          width:68px;height:68px;
-        }
-
-        #sg-btn-dash {
-          bottom:50%;right:90px;
-          transform:translateY(10%);
-          width:46px;height:46px;
-        }
-
-        #sg-touch-powers {
-          top:4px;right:4px;
-          flex-direction:row;
-          gap:3px;
-        }
-
-        #sg-hud {
-          padding:0.3rem 1rem;
-        }
-
-        #sg-power-bar {
-          bottom:6px;
-        }
-
-        #sg-dash-indicator {
-          bottom:6px;left:150px;
-        }
-      }
     `;
     document.head.appendChild(s);
   }
@@ -825,19 +807,19 @@ function _initHaloScript() {
       // shootInt is the ms between shots — keep it high so fewer bullets
       switch(type){
         case 'grunt':  return {...base, w:30,h:34, hp:1,
-          spd:0.12+waveN*0.008, shootInt:2200, shootT:800+Math.random()*600,
+          spd:0.12+waveN*0.008, shootInt:3500, shootT:1200+Math.random()*800,
           color:'#ff003c', pts:10*waveN, type:'grunt', dodge:0, dodgeT:0};
         case 'elite':  return {...base, w:36,h:42, hp:1+Math.floor(waveN/6),
-          spd:0.16+waveN*0.01, shootInt:1800, shootT:600+Math.random()*500,
+          spd:0.16+waveN*0.01, shootInt:3000, shootT:1000+Math.random()*600,
           color:'#ff6600', pts:25*waveN, type:'elite', dodge:0, dodgeT:0, zigzag:0};
         case 'hunter': return {...base, w:44,h:50, hp:3+Math.floor(waveN/3),
-          spd:0.09+waveN*0.007, shootInt:2600, shootT:1200,
+          spd:0.09+waveN*0.007, shootInt:4000, shootT:1800,
           color:'#cc00ff', pts:50*waveN, type:'hunter', dodge:0, dodgeT:0, charge:false, chargeT:0};
         case 'jackal': return {...base, w:28,h:36, hp:1,
           spd:0.35+waveN*0.015, shootInt:9999, shootT:0,
           color:'#00aaff', pts:15*waveN, type:'jackal', dodge:0, dodgeT:0, shield:true};
         case 'boss':   return {...base, w:80,h:70, hp:25+waveN*5, maxHp:25+waveN*5,
-          spd:0.16+waveN*0.015, shootInt:1400, shootT:400,
+          spd:0.16+waveN*0.015, shootInt:2200, shootT:800,
           color:'#ff0080', pts:500*waveN, type:'boss',
           phase:0, sideDir:1, sideT:0, dodge:0, dodgeT:0, pattern:0, patternT:0};
       }
