@@ -483,6 +483,81 @@ function _initHaloScript() {
       .sg-touch-power .sg-cd-fill { position:absolute;bottom:0;left:0;right:0;background:rgba(0,200,255,0.15);border-radius:0 0 4px 4px; }
 
       @media(min-width:701px){ #sg-touch-controls { display:none!important; } }
+
+      /* ── TELA DE ORIENTAÇÃO ── */
+      #sg-rotate-screen {
+        position:fixed;inset:0;z-index:2000000;
+        background:#020914;
+        display:flex;flex-direction:column;align-items:center;justify-content:center;
+        gap:1.5rem;font-family:'Orbitron',sans-serif;color:#00ffe7;text-align:center;
+        padding:2rem;
+      }
+      #sg-rotate-screen .sg-rotate-icon {
+        font-size:3.5rem;
+        animation:sg-rotate-anim 2s ease-in-out infinite;
+      }
+      @keyframes sg-rotate-anim {
+        0%   { transform: rotate(0deg); }
+        40%  { transform: rotate(90deg); }
+        60%  { transform: rotate(90deg); }
+        100% { transform: rotate(90deg); }
+      }
+      #sg-rotate-screen .sg-rotate-title {
+        font-size:clamp(1rem,5vw,1.6rem);font-weight:900;letter-spacing:4px;
+        text-shadow:0 0 30px #00ffe7;
+      }
+      #sg-rotate-screen .sg-rotate-sub {
+        font-size:clamp(0.55rem,3vw,0.75rem);letter-spacing:3px;
+        color:#7ab8d4;line-height:1.8;
+      }
+      #sg-rotate-skip {
+        margin-top:0.5rem;padding:0.5rem 1.5rem;
+        border:1px solid rgba(0,200,255,0.3);background:transparent;
+        color:rgba(0,200,255,0.5);font-family:'Orbitron',sans-serif;
+        font-size:0.5rem;letter-spacing:2px;cursor:pointer;
+      }
+      #sg-rotate-skip:hover { color:#00ffe7;border-color:#00ffe7; }
+
+      /* ── LANDSCAPE: reorganiza controles touch ── */
+      @media (orientation: landscape) and (max-height: 500px) {
+        #sg-touch-controls { height:100% !important; }
+
+        #sg-joystick-zone {
+          bottom:50%;left:12px;
+          transform:translateY(50%);
+          width:110px;height:110px;
+        }
+
+        #sg-btn-shoot {
+          bottom:50%;right:12px;
+          transform:translateY(60%);
+          width:68px;height:68px;
+        }
+
+        #sg-btn-dash {
+          bottom:50%;right:90px;
+          transform:translateY(10%);
+          width:46px;height:46px;
+        }
+
+        #sg-touch-powers {
+          top:4px;right:4px;
+          flex-direction:row;
+          gap:3px;
+        }
+
+        #sg-hud {
+          padding:0.3rem 1rem;
+        }
+
+        #sg-power-bar {
+          bottom:6px;
+        }
+
+        #sg-dash-indicator {
+          bottom:6px;left:150px;
+        }
+      }
     `;
     document.head.appendChild(s);
   }
@@ -495,8 +570,52 @@ function _initHaloScript() {
     document.body.classList.remove('game-active');
   }
 
+  /* ══ TELA DE ORIENTAÇÃO (mobile apenas) ══ */
+  function showRotateScreen(onDone) {
+    // Só mostra em dispositivos touch em portrait
+    const isTouch = window.matchMedia('(hover: none), (pointer: coarse)').matches;
+    const isPortrait = window.innerHeight > window.innerWidth;
+    if (!isTouch || !isPortrait) { onDone(); return; }
+
+    const el = document.createElement('div');
+    el.id = 'sg-rotate-screen';
+    el.innerHTML = `
+      <div class="sg-rotate-icon">📱</div>
+      <div class="sg-rotate-title">VIRE O DISPOSITIVO</div>
+      <div class="sg-rotate-sub">
+        SPARTAN PROTOCOL funciona melhor<br>
+        em modo <strong style="color:#00ffe7;">PAISAGEM</strong><br><br>
+        Gire o celular para uma<br>experiência de combate completa.
+      </div>
+      <button id="sg-rotate-skip">CONTINUAR ASSIM MESMO</button>
+    `;
+    document.body.appendChild(el);
+    document.body.classList.add('game-active');
+
+    // Some automaticamente quando virar para landscape
+    function checkOrientation() {
+      if (window.innerWidth > window.innerHeight) {
+        el.remove();
+        window.removeEventListener('resize', checkOrientation);
+        onDone();
+      }
+    }
+    window.addEventListener('resize', checkOrientation);
+
+    // Botão para pular
+    el.querySelector('#sg-rotate-skip').addEventListener('click', function() {
+      el.remove();
+      window.removeEventListener('resize', checkOrientation);
+      onDone();
+    });
+  }
+
   /* ══ MAIN MENU ══ */
   function openMenu() {
+    showRotateScreen(function() { _openMenuReal(); });
+  }
+
+  function _openMenuReal() {
     injectStyles();
     removeEl('sg-menu');
     chord([523,659,784,1047]);
